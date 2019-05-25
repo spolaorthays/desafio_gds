@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">DesafioAndroidGDS</string>
+    <string name="numeroCartao">Digite o número do cartão:</string>
+    <string name="historico">Histórico de consultas</string>
+    <string name="consultar">Consultar</string>
+    <string name="text_historico">Deseja visualizar seu histórico de consultas?</string>
+    <string name="quantidade">Quantidade:</string>
+    <string name="vltotal">Valor total:</string>
+    <string name="valor_total">Valor total:</string>
+    <string name="data_da_ocorrencia">Hora da ocorrência:</string>
+    <string name="operacaodc">OperacaoDC:</string>
+    <string name="descricao">Descrição:</string>
+    <string name="cancelado">Cancelado:</string>
+    <string name="movimentos">Movimentações:</string>
+    <string name="nome_empresa">Empresa:</string>
+    <string name="saldo">Saldo:</string>
+    <string name="data_update">Update:</string>
+    <string name="nome_do_cliente">Cliente:</string>
+</resources>

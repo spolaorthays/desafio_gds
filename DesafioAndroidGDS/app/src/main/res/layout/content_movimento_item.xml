@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_quant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quantidade"/>
+
+        <TextView
+            android:id="@+id/mov_quantidade_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/text_quant"/>
+
+        <TextView
+            android:id="@+id/text_vl_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vltotal"
+            android:layout_below="@id/text_quant"/>
+
+        <TextView
+            android:id="@+id/mov_valortotal_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_below="@id/text_quant"
+            android:layout_toEndOf="@id/text_vl_total"/>
+
+        <TextView
+            android:id="@+id/text_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data_da_ocorrencia"
+            android:layout_below="@id/text_vl_total"/>
+
+        <TextView
+            android:id="@+id/mov_dataocorrencia_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_below="@+id/text_vl_total"
+            android:layout_toEndOf="@id/text_data"/>
+
+        <TextView
+            android:id="@+id/text_operacoes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operacaodc"
+            android:layout_below="@id/text_data"/>
+
+        <TextView
+            android:id="@+id/mov_operacaodc_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_below="@id/text_data"
+            android:layout_toEndOf="@id/text_operacoes"/>
+
+        <TextView
+            android:id="@+id/text_descricao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/descricao"
+            android:layout_below="@id/text_operacoes"/>
+
+        <TextView
+            android:id="@+id/mov_descricao_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_below="@id/text_operacoes"
+            android:layout_toEndOf="@id/text_descricao"/>
+
+        <TextView
+            android:id="@+id/text_cancelado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="@string/cancelado"
+            android:layout_below="@id/text_descricao"/>
+
+        <TextView
+            android:id="@+id/mov_cancelado_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_below="@id/text_descricao"
+            android:layout_toEndOf="@id/text_cancelado"/>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
