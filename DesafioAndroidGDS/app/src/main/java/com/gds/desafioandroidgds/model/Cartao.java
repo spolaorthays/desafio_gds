@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Cartao implements Serializable {
 
+    private int idCartao;
     @SerializedName("codCartao")
     @Expose
     private int codCartao;
@@ -31,6 +32,14 @@ public class Cartao implements Serializable {
     private List<Movimento> movimentos = null;
 
     public Cartao() {
+    }
+
+    public int getIdCartao() {
+        return idCartao;
+    }
+
+    public void setIdCartao(int idCartao) {
+        this.idCartao = idCartao;
     }
 
     public int getCodCartao() {

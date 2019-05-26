@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         verificarEConsultar();
 
+        visualizarHistorico();
+
     }
 
     private void getIds(){
@@ -49,20 +51,34 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void visualizarHistorico(){
+        btHistorico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHistorico();
+            }
+        });
+    }
+
+    private void goToHistorico(){
+        Intent intent = new Intent(this, HistoricoActivity.class);
+        startActivity(intent);
+    }
+
     public void verificandoValorDigitado(){
         String codigo = codCartao.getEditableText().toString();
-        String codDigitado = "000346";
-        String codDigitado2 = "00346";
-        String codDigitado3 = "0346";
-        String codDigitado4 = "346";
+//        String codDigitado = "000346";
+//        String codDigitado2 = "00346";
+//        String codDigitado3 = "0346";
+        String codDigitado = "346";
         if (codigo.equals(codDigitado)){
             goToConsulta();
-        }else if (codigo.equals(codDigitado2)){
-            goToConsulta();
-        }else if (codigo.equals(codDigitado3)){
-            goToConsulta();
-        }else if (codigo.equals(codDigitado4)){
-            goToConsulta();
+//        }else if (codigo.equals(codDigitado2)){
+//            goToConsulta();
+//        }else if (codigo.equals(codDigitado3)){
+//            goToConsulta();
+//        }else if (codigo.equals(codDigitado4)){
+//            goToConsulta();
         }else {
             Toast.makeText(this, "Código Inválido", Toast.LENGTH_LONG).show();
         }

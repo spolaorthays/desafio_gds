@@ -2,6 +2,7 @@ package com.gds.desafioandroidgds.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -17,8 +18,9 @@ public class MyDbHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "desafio_gds.db";
 
-    //Tabela Clientes
+    //Tabela Cartao
     public static final String TABLE_CARTAO = "cartao";
+    public static final String COLUMN_ID_CARTAO = "idCartao";
     public static final String COLUMN_COD_CARTAO = "codCartao";
     public static final String COLUMN_NOME_EMPRESA = "nomeEmpresa";
     public static final String COLUMN_SALDO = "saldo";
@@ -27,7 +29,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
     public static final String COLUMN_COD_EMPRESA = "codEmpresa";
 
     //Tabela Movimentos
-    public static final String TABLE_MOVIMENTO = "cliente";
+    public static final String TABLE_MOVIMENTO = "movimento";
     public static final String COLUMN_NUM_ID = "numId";
     public static final String COLUMN_COD_PRODUTO = "codProduto";
     public static final String COLUMN_QUANTIDADE = "quantidade";
@@ -38,15 +40,18 @@ public class MyDbHandler extends SQLiteOpenHelper {
     public static final String COLUMN_CANCELADO = "cancelado";
     public static final String COLUMN_FK_COD_EMPRESA = "codEmpresa";
 
+    private Resources resources;
 
     public MyDbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        resources = context.getResources();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_CARTAO + "(" +
-                COLUMN_COD_CARTAO + " INTEGER PRIMARY KEY, " +
+                COLUMN_ID_CARTAO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_COD_CARTAO + " INTEGER , " +
                 COLUMN_NOME_EMPRESA + " TEXT , " +
                 COLUMN_SALDO + " TEXT , " +
                 COLUMN_DT_ULTIMO_UPDATE + " TEXT , " +
@@ -71,10 +76,10 @@ public class MyDbHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Comandos caso necessitar alterar a tabela ou dropar
-        //db.execSQL("ALTER TABLE " + TABLE_CARTAO + " ADD " + COLUMN_X + " TEXT ;");
-        //db.execSQL(" DROP TABLE IF EXISTS " + TABLE_CARTAO);
-        //db.execSQL(" DROP TABLE IF EXISTS " + TABLE_MOVIMENTO);
-        //onCreate(db);
+//        db.execSQL("ALTER TABLE " + TABLE_CARTAO + " ADD " + COLUMN_X + " INTEGER ;");
+//        db.execSQL(" DROP TABLE IF EXISTS " + TABLE_CARTAO);
+//        db.execSQL(" DROP TABLE IF EXISTS " + TABLE_MOVIMENTO);
+        onCreate(db);
     }
 
     //Métodos de adicionar
@@ -92,8 +97,6 @@ public class MyDbHandler extends SQLiteOpenHelper {
             values.put(COLUMN_NOME, cartao.getNome());
         if (cartao.getCodEmpresa() != -1)
             values.put(COLUMN_COD_EMPRESA, cartao.getCodEmpresa());
-//        if (cartao.getMovimentos() != null)
-//            values.put(COLUMN_MOVIMENTOS, cartao.getMovimentos());
 
         SQLiteDatabase db = getWritableDatabase();
         long insertedId = db.insert(TABLE_CARTAO, null, values);
@@ -129,15 +132,16 @@ public class MyDbHandler extends SQLiteOpenHelper {
     }
 
     //Métodos de select
-    public Cartao getCartao (int codCartao){
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_CARTAO + " WHERE " + COLUMN_COD_CARTAO + "=" + codCartao;
+    public Cartao getCartao (int idCartao){
+        SQLiteDatabase db = getWritableDatabase(); //na linha de baixo tirei o cod cartao e coloquei o id
+        String query = "SELECT * FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + "=" + idCartao;
 
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         Cartao cartao = new Cartao();
-        while (!cursor.isAfterLast()){
-            if (cursor.getString(cursor.getColumnIndex(COLUMN_COD_CARTAO)) != null){
+        while (!cursor.isAfterLast()){//aqui tirei da linha do baixo o codcartao e add ele na linha abaixo dela
+            if (cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO)) != -1){
+                cartao.setCodCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_CARTAO)));
                 cartao.setNomeEmpresa(cursor.getString(cursor.getColumnIndex(COLUMN_NOME_EMPRESA)));
                 cartao.setSaldo(cursor.getString(cursor.getColumnIndex(COLUMN_SALDO)));
                 cartao.setDtUltimoUpdate(cursor.getString(cursor.getColumnIndex(COLUMN_DT_ULTIMO_UPDATE)));

@@ -35,4 +35,25 @@ public class Dao {
 
         return new ArrayList<>();
     }
+
+    public Cartao getCartao (Context context, final ServiceListener listener){
+
+        Call<Cartao> call = RetrofitService.getApi().getCartao();
+
+        call.enqueue(new Callback<Cartao>() {
+            @Override
+            public void onResponse(Call<Cartao> call, Response<Cartao> response) {
+                if (response.body() != null){
+                    listener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cartao> call, Throwable t) {
+                listener.onError(t);
+            }
+        });
+
+        return new Cartao();
+    }
 }
