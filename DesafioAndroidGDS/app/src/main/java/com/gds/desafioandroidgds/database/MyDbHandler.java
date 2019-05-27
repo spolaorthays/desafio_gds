@@ -87,24 +87,42 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
     //Métodos de adicionar
     public long adicionarCartao(Cartao cartao){
-        ContentValues values = new ContentValues();
-        if (cartao.getCodCartao() != -1)
-            values.put(COLUMN_COD_CARTAO, cartao.getCodCartao());
-        if (cartao.getNomeEmpresa() != null)
-            values.put(COLUMN_NOME_EMPRESA, cartao.getNomeEmpresa());
-        if (cartao.getSaldo() != null)
-            values.put(COLUMN_SALDO, cartao.getSaldo());
-        if (cartao.getDtUltimoUpdate() != null)
-            values.put(COLUMN_DT_ULTIMO_UPDATE, cartao.getDtUltimoUpdate());
-        if (cartao.getNome() != null)
-            values.put(COLUMN_NOME, cartao.getNome());
-        if (cartao.getCodEmpresa() != -1)
-            values.put(COLUMN_COD_EMPRESA, cartao.getCodEmpresa());
+        countRows();
+
+            ContentValues values = new ContentValues();
+            if (cartao.getCodCartao() != -1)
+                values.put(COLUMN_COD_CARTAO, cartao.getCodCartao());
+            if (cartao.getNomeEmpresa() != null)
+                values.put(COLUMN_NOME_EMPRESA, cartao.getNomeEmpresa());
+            if (cartao.getSaldo() != null)
+                values.put(COLUMN_SALDO, cartao.getSaldo());
+            if (cartao.getDtUltimoUpdate() != null)
+                values.put(COLUMN_DT_ULTIMO_UPDATE, cartao.getDtUltimoUpdate());
+            if (cartao.getNome() != null)
+                values.put(COLUMN_NOME, cartao.getNome());
+            if (cartao.getCodEmpresa() != -1)
+                values.put(COLUMN_COD_EMPRESA, cartao.getCodEmpresa());
+
+            SQLiteDatabase db = getWritableDatabase();
+            long insertedId = db.insert(TABLE_CARTAO, null, values);
+            db.close();
+            return insertedId;
+    }
+
+    //Método para verificar quantos linhas já tem no DB na Tabela Cartão.
+    public int countRows(){
+        int numberRows = 0;
 
         SQLiteDatabase db = getWritableDatabase();
-        long insertedId = db.insert(TABLE_CARTAO, null, values);
-        db.close();
-        return insertedId;
+        String query = "SELECT COUNT(*) FROM " +TABLE_CARTAO;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount()>0){
+            cursor.moveToFirst();
+            numberRows = cursor.getInt(0);
+        }
+        cursor.close();
+        return numberRows;
     }
 
     public long adicionarMovimentos(Movimento movimento){
@@ -184,9 +202,35 @@ public class MyDbHandler extends SQLiteOpenHelper {
         return cartaoList;
     }
 
-    public List<Cartao> getUltimasConsultas(){
+    public List<Cartao> getAllUltimasConsultas(){
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_CARTAO + " ORDER BY " + COLUMN_ID_CARTAO + " DESC LIMIT 15";
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        List<Cartao> cartaoList = new ArrayList<>();
+
+        while (!cursor.isAfterLast()){
+            Cartao cartao = new Cartao();
+            if (cursor.getString(cursor.getColumnIndex(COLUMN_ID_CARTAO)) != null){
+                cartao.setIdCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO)));
+                cartao.setCodCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_CARTAO)));
+                cartao.setNomeEmpresa(cursor.getString(cursor.getColumnIndex(COLUMN_NOME_EMPRESA)));
+                cartao.setSaldo(cursor.getString(cursor.getColumnIndex(COLUMN_SALDO)));
+                cartao.setDtUltimoUpdate(cursor.getString(cursor.getColumnIndex(COLUMN_DT_ULTIMO_UPDATE)));
+                cartao.setNome(cursor.getString(cursor.getColumnIndex(COLUMN_NOME)));
+                cartao.setCodEmpresa(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_EMPRESA)));
+            }
+            cartaoList.add(cartao);
+            cursor.moveToNext();
+        }
+        db.close();
+        return cartaoList;
+    }
+
+    public List<Cartao> getUltimasConsultasPorApi(int codCartao){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_CARTAO + " WHERE " + COLUMN_COD_CARTAO + "=" + codCartao +" ORDER BY " + COLUMN_ID_CARTAO + " DESC LIMIT 15";
 
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
@@ -265,16 +309,32 @@ public class MyDbHandler extends SQLiteOpenHelper {
     }
 
     //Métodos de delete
-    public void deleteMovimento(int numId){
+    public void deleteMovimento(int id){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_NUM_ID + " =\"" + numId + "\";");
+        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_ID + " =\"" + id + "\";");
         db.close();
     }
 
-    public void deleteCartao(int codCartao){
+    public void deleteCartao(int idCartao){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_CARTAO + " WHERE " + COLUMN_COD_CARTAO + " =\"" + codCartao + "\";");
-        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + codCartao + "\";");
+        db.execSQL("DELETE FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + " =\"" + idCartao + "\";");
+        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + idCartao + "\";");
         db.close();
+    }
+
+    public void deleteCartoesAntigos(int idCartao){
+        SQLiteDatabase db = getWritableDatabase();
+
+        //Seleciona o id mais antigo
+        String query = "SELECT " +COLUMN_ID_CARTAO+ " FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + "=" + idCartao +" ORDER BY DATE" + COLUMN_DT_ULTIMO_UPDATE + " ASC LIMIT 1";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        int idSelect=Integer.parseInt(query);
+
+        //Deleta esse id específico do DB
+        db.execSQL("DELETE FROM " +TABLE_CARTAO+ " WHERE " + idCartao + "= '" + idSelect + "'");
+        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + idCartao + "\";");
+        db.close();
+
     }
 }

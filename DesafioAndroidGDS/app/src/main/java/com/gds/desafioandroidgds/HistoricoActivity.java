@@ -30,9 +30,11 @@ public class HistoricoActivity extends AppCompatActivity implements OnCardClick 
 
         dbHandler = new MyDbHandler(this, null, null,1);
 
+        String codDigitado = getIntent().getExtras().getString(MainActivity.COD_CARTAO);
+
         getIds();
 
-        setupRecycler();
+        setupRecycler(codDigitado);
 
         voltarAoInicio();
     }
@@ -42,8 +44,25 @@ public class HistoricoActivity extends AppCompatActivity implements OnCardClick 
         voltar = findViewById(R.id.bt_voltar_his);
     }
 
-    private void setupRecycler() {
-        adapter = new RecyclerHistoricoAdapter(dbHandler.getUltimasConsultas(), dbHandler, this);
+    private void setupRecycler(String codDigitado) {
+        int idCartao;
+
+        if (codDigitado.equals("")){
+            adapter = new RecyclerHistoricoAdapter(dbHandler.getAllUltimasConsultas(), dbHandler, this);
+        }else if (codDigitado != null){
+            idCartao = Integer.parseInt(codDigitado);
+            if (codDigitado.equals("346")){
+                adapter = new RecyclerHistoricoAdapter(dbHandler.getUltimasConsultasPorApi(idCartao), dbHandler, this);
+            }else if(codDigitado.equals("150")){
+                adapter = new RecyclerHistoricoAdapter(dbHandler.getUltimasConsultasPorApi(idCartao), dbHandler, this);
+            }else if(codDigitado.equals("410")){
+                adapter = new RecyclerHistoricoAdapter(dbHandler.getUltimasConsultasPorApi(idCartao), dbHandler, this);
+            }else if(codDigitado.equals("500")){
+                adapter = new RecyclerHistoricoAdapter(dbHandler.getUltimasConsultasPorApi(idCartao), dbHandler, this);
+            }else if(codDigitado.equals("671")){
+                adapter = new RecyclerHistoricoAdapter(dbHandler.getUltimasConsultasPorApi(idCartao) , dbHandler, this);
+            }
+        }
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -66,6 +85,6 @@ public class HistoricoActivity extends AppCompatActivity implements OnCardClick 
         bundle.putInt(CARTAO_ID, cartao.getIdCartao());
         intent.putExtras(bundle);
         startActivity(intent);
+        finish();
     }
-
 }

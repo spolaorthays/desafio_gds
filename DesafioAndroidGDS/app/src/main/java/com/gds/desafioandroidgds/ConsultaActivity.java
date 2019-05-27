@@ -11,13 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gds.desafioandroidgds.adapter.RecyclerMovimentosAdapter;
-import com.gds.desafioandroidgds.dao.Dao;
+import com.gds.desafioandroidgds.database.dao.Dao;
 import com.gds.desafioandroidgds.database.MyDbHandler;
 import com.gds.desafioandroidgds.model.Cartao;
 import com.gds.desafioandroidgds.model.Movimento;
 import com.gds.desafioandroidgds.service.ServiceListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ConsultaActivity extends AppCompatActivity implements ServiceListener {
@@ -41,13 +40,24 @@ public class ConsultaActivity extends AppCompatActivity implements ServiceListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consulta);
 
+        String codDigitado = getIntent().getExtras().getString(MainActivity.COD_CARTAO);
+
         cartao = new Cartao();
 
         dao = new Dao();
-        //Se sobrar tempo fazer um if nessa linha de baixo para mudar entre as apis.
-        // Isso pode ser feito pegando o numero digitado na tela anterior e mandando ele pra cá pelo bundle.
-        //Ai lá no dao/api eu configuro o Get para ter um de cada api
-        cartao = dao.getCartao(this, this);
+
+        //Com isso eu consigo abrir as diferentes api dependendo apenas do número do cartão previamente digitado
+        if (codDigitado.equals("346")){
+            cartao = dao.getCartao(this, this);
+        }else if(codDigitado.equals("150")){
+            cartao = dao.getApiDois(this, this);
+        }else if(codDigitado.equals("410")){
+            cartao = dao.getApiTres(this, this);
+        }else if(codDigitado.equals("500")){
+            cartao = dao.getApiQuatro(this, this);
+        }else if(codDigitado.equals("671")){
+            cartao = dao.getApiCinco(this, this);
+        }
 
         dbHandler = new MyDbHandler(this, null, null,1);
 

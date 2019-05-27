@@ -1,6 +1,6 @@
 package com.gds.desafioandroidgds.adapter;
 
-import android.os.Bundle;
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.gds.desafioandroidgds.R;
 import com.gds.desafioandroidgds.database.MyDbHandler;
 import com.gds.desafioandroidgds.interfaces.OnCardClick;
@@ -56,7 +55,6 @@ public class RecyclerHistoricoAdapter extends RecyclerView.Adapter<RecyclerHisto
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             nomeCliente = itemView.findViewById(R.id.his_nome_id);
             saldo = itemView.findViewById(R.id.his_saldo_id);
             dataConsulta = itemView.findViewById(R.id.his_data_id);
