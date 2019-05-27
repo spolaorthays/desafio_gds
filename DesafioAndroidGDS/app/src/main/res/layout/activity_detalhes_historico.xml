@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConsultaActivity"
+    tools:context=".DetalhesHistoricoActivity"
     android:background="@color/colorBlueWhite">
 
     <android.support.constraint.ConstraintLayout
@@ -12,13 +12,13 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/titulo_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/dados_do_cartao"
+            android:text="@string/detalhes_da_consulta"
             android:textColor="@color/colorBlueDark"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,16 +34,16 @@
             android:text="@string/nome_empresa"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/titulo_id" />
 
         <TextView
-            android:id="@+id/consulta_nomeempresa_id"
+            android:id="@+id/detalhes_nomeempresa_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toEndOf="@+id/text_empresa"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/titulo_id" />
 
         <TextView
             android:id="@+id/text_saldo"
@@ -57,7 +57,7 @@
             app:layout_constraintTop_toBottomOf="@+id/text_empresa" />
 
         <TextView
-            android:id="@+id/consulta_saldo_id"
+            android:id="@+id/detalhes_saldo_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -77,13 +77,13 @@
             app:layout_constraintTop_toBottomOf="@+id/text_saldo" />
 
         <TextView
-            android:id="@+id/consulta_ultimo_update"
+            android:id="@+id/detalhes_ultimo_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toEndOf="@+id/text_update"
-            app:layout_constraintTop_toBottomOf="@+id/consulta_saldo_id" />
+            app:layout_constraintTop_toBottomOf="@+id/detalhes_saldo_id" />
 
         <TextView
             android:id="@+id/text_cliente_id"
@@ -97,16 +97,16 @@
             app:layout_constraintTop_toBottomOf="@+id/text_update" />
 
         <TextView
-            android:id="@+id/consulta_nomecliente_id"
+            android:id="@+id/detalhes_nomecliente_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toEndOf="@+id/text_cliente_id"
-            app:layout_constraintTop_toBottomOf="@+id/consulta_ultimo_update" />
+            app:layout_constraintTop_toBottomOf="@+id/detalhes_ultimo_update" />
 
         <TextView
-            android:id="@+id/con_text_movimentos"
+            android:id="@+id/det_text_movimentos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -118,34 +118,33 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/consulta_nomecliente_id" />
+            app:layout_constraintTop_toBottomOf="@+id/detalhes_nomecliente_id" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/consulta_recycler_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/con_text_movimentos" />
-
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/detalhes_recycler_id"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/det_text_movimentos" />
 
         <Button
-            android:id="@+id/bt_voltar"
+            android:id="@+id/bt_voltar_det"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/voltar"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            android:backgroundTint="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/consulta_recycler_id" />
+            app:layout_constraintTop_toBottomOf="@+id/detalhes_recycler_id" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

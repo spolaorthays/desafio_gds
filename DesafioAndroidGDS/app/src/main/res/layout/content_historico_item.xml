@@ -8,7 +8,8 @@
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true"
-    app:cardPreventCornerOverlap="false">
+    app:cardPreventCornerOverlap="false"
+    app:cardBackgroundColor="@color/colorBlueLight">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,20 +19,26 @@
             android:id="@+id/text_nome_cliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nome_do_cliente"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/nome_do_cliente"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/his_nome_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@+id/text_nome_cliente"/>
 
         <TextView
             android:id="@+id/text_saldo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text="@string/saldo"
+            android:textStyle="bold"
             android:layout_below="@id/text_nome_cliente"/>
 
         <TextView
@@ -46,7 +53,9 @@
             android:id="@+id/text_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text="@string/data_consulta"
+            android:textStyle="bold"
             android:layout_below="@id/text_saldo"/>
 
         <TextView
@@ -62,8 +71,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/detalhes"
-            android:layout_marginTop="5dp"
-            android:paddingBottom="5dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="2dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/his_data_id" />
 

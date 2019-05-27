@@ -64,14 +64,15 @@ public class RecyclerHistoricoAdapter extends RecyclerView.Adapter<RecyclerHisto
         }
 
         public void bind(final Cartao cartao){
+            String real = "R$ ";
+
             nomeCliente.setText(cartao.getNome());
-            saldo.setText(cartao.getSaldo());
+            saldo.setText(String.format("%s%s", real, cartao.getSaldo()));
             dataConsulta.setText(cartao.getDtUltimoUpdate());
             btDetalhes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onCardClick.onCardClicado(cartao);
-                    //TODO aqui deve ir para uma nova activity com os detalhes vindo do database, pelo que vi parece que posso usar interface para isso
                 }
             });
         }

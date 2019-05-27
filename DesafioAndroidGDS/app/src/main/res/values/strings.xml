@@ -3,7 +3,7 @@
     <string name="numeroCartao">Digite os 3 últimos números do cartão</string>
     <string name="historico">Histórico de consultas</string>
     <string name="consultar">Consultar</string>
-    <string name="text_historico">Deseja visualizar seu histórico de consultas?</string>
+    <string name="text_historico">Deseja visualizar suas últimas consultas?</string>
     <string name="quantidade">Quantidade:</string>
     <string name="vltotal">Valor total:</string>
     <string name="valor_total">Valor total:</string>
@@ -17,8 +17,14 @@
     <string name="data_update">Update:</string>
     <string name="nome_do_cliente">Cliente:</string>
     <string name="voltar">Voltar</string>
-    <string name="text_historico_consultas">Histórico das últimas 15 consultas</string>
+    <string name="text_historico_consultas">Histórico das últimas consultas</string>
     <string name="consulta">Consulta</string>
     <string name="data_consulta">Consultado em:</string>
     <string name="detalhes">Detalhes</string>
+    <string name="id_operacao">ID Operação:</string>
+    <string name="cod_produto">Código do produto:</string>
+    <string name="detalhes_da_consulta">Detalhes da consulta</string>
+    <string name="bem_vindo">Bem-vindo!</string>
+    <string name="consulte_text">Consulte aqui seu cartão:</string>
+    <string name="dados_do_cartao">Dados do Cartão</string>
 </resources>

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movimento {
 
+    private int id;
     @SerializedName("numId")
     @Expose
     private String numId;
@@ -29,11 +30,17 @@ public class Movimento {
     @SerializedName("cancelado")
     @Expose
     private String cancelado;
-    @SerializedName("CodEmpresa")
-    @Expose
-    private int fkCodEmpresa;
+    private int fkIdCartao;
 
     public Movimento() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNumId() {
@@ -100,11 +107,11 @@ public class Movimento {
         this.cancelado = cancelado;
     }
 
-    public int getFkCodEmpresa() {
-        return fkCodEmpresa;
+    public int getFkIdCartao() {
+        return fkIdCartao;
     }
 
-    public void setFkCodEmpresa(int fkCodEmpresa) {
-        this.fkCodEmpresa = fkCodEmpresa;
+    public void setFkIdCartao(int fkIdCartao) {
+        this.fkIdCartao = fkIdCartao;
     }
 }

@@ -30,7 +30,6 @@ public class ConsultaActivity extends AppCompatActivity implements ServiceListen
 
     private Cartao cartao;
 
-
     private RecyclerView recyclerView;
     private RecyclerMovimentosAdapter adapter;
 
@@ -71,28 +70,20 @@ public class ConsultaActivity extends AppCompatActivity implements ServiceListen
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //salvarDadosCartao(cartao);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
 
-    private void salvarDadosCartao(Cartao cartao){
-        /*Cartao cartaoDB = new Cartao();
-        cartaoDB.setNomeEmpresa(cartao.getNomeEmpresa());
-        cartaoDB.setSaldo(cartao.getSaldo());
-        cartaoDB.setNome(cartao.getNome());
-        cartaoDB.setDtUltimoUpdate(cartao.getDtUltimoUpdate());
-        //cartaoDB.setMovimentos(cartao.getMovimentos());
-
-        cartaoDB.setCodCartao((int) dbHandler.adicionarCartao(cartao));*/
-        dbHandler.adicionarCartao(cartao);
+    private long salvarDadosCartao(Cartao cartao){
+        return dbHandler.adicionarCartao(cartao);
     }
 
-    private void salvarDadosMovimento(List<Movimento> movimentos, int codEmpresa){
+    private void salvarDadosMovimento(List<Movimento> movimentos, int idCartao){
         for (Movimento mov: movimentos) {
-            mov.setFkCodEmpresa(codEmpresa);
+            mov.setFkIdCartao(idCartao);
             dbHandler.adicionarMovimentos(mov);
         }
     }
@@ -112,9 +103,8 @@ public class ConsultaActivity extends AppCompatActivity implements ServiceListen
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        salvarDadosCartao(cartao);
-        salvarDadosMovimento(movimentos, cartao.getCodEmpresa());
-
+        int idConsulta = (int) salvarDadosCartao(cartao);
+        salvarDadosMovimento(movimentos, idConsulta);
     }
 
     @Override

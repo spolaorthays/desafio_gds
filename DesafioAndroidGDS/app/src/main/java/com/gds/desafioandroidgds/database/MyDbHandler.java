@@ -30,6 +30,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
     //Tabela Movimentos
     public static final String TABLE_MOVIMENTO = "movimento";
+    public static final String COLUMN_ID = "id";
     public static final String COLUMN_NUM_ID = "numId";
     public static final String COLUMN_COD_PRODUTO = "codProduto";
     public static final String COLUMN_QUANTIDADE = "quantidade";
@@ -38,8 +39,9 @@ public class MyDbHandler extends SQLiteOpenHelper {
     public static final String COLUMN_OPERACAO_DC = "operacaoDC";
     public static final String COLUMN_DESCRICAO = "descricao";
     public static final String COLUMN_CANCELADO = "cancelado";
-    public static final String COLUMN_FK_COD_EMPRESA = "codEmpresa";
+    public static final String COLUMN_FK_ID_CARTAO = "idCartao";
 
+    //O resources será necessário se em algum momento tiver um array com valores para um spinner, por exemplo.
     private Resources resources;
 
     public MyDbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -60,7 +62,8 @@ public class MyDbHandler extends SQLiteOpenHelper {
         db.execSQL(query);
 
         query = "CREATE TABLE " + TABLE_MOVIMENTO + "(" +
-                COLUMN_NUM_ID + " INTEGER PRIMARY KEY, " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NUM_ID + " INTEGER , " +
                 COLUMN_COD_PRODUTO + " TEXT , " +
                 COLUMN_QUANTIDADE + " TEXT , " +
                 COLUMN_VL_TOTAL + " TEXT , " +
@@ -68,8 +71,8 @@ public class MyDbHandler extends SQLiteOpenHelper {
                 COLUMN_OPERACAO_DC + " TEXT , " +
                 COLUMN_DESCRICAO + " TEXT , " +
                 COLUMN_CANCELADO + " TEXT , " +
-                COLUMN_FK_COD_EMPRESA + " INTEGER, "
-                + " FOREIGN KEY ("+COLUMN_FK_COD_EMPRESA+") REFERENCES "+TABLE_CARTAO+"("+COLUMN_COD_EMPRESA+"));";
+                COLUMN_FK_ID_CARTAO + " INTEGER, "
+                + " FOREIGN KEY ("+COLUMN_FK_ID_CARTAO+") REFERENCES "+TABLE_CARTAO+"("+COLUMN_ID_CARTAO+"));";
         db.execSQL(query);
     }
 
@@ -122,8 +125,8 @@ public class MyDbHandler extends SQLiteOpenHelper {
             values.put(COLUMN_DESCRICAO, movimento.getDescricao());
         if (movimento.getCancelado() != null)
             values.put(COLUMN_CANCELADO, movimento.getCancelado());
-        if (movimento.getFkCodEmpresa() != -1)
-            values.put(COLUMN_FK_COD_EMPRESA, movimento.getFkCodEmpresa());
+        if (movimento.getFkIdCartao() != -1)
+            values.put(COLUMN_FK_ID_CARTAO, movimento.getFkIdCartao());
 
         SQLiteDatabase db = getWritableDatabase();
         long insertedId = db.insert(TABLE_MOVIMENTO, null, values);
@@ -133,14 +136,15 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
     //Métodos de select
     public Cartao getCartao (int idCartao){
-        SQLiteDatabase db = getWritableDatabase(); //na linha de baixo tirei o cod cartao e coloquei o id
+        SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + "=" + idCartao;
 
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         Cartao cartao = new Cartao();
-        while (!cursor.isAfterLast()){//aqui tirei da linha do baixo o codcartao e add ele na linha abaixo dela
-            if (cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO)) != -1){
+        while (!cursor.isAfterLast()){
+            if (cursor.getString(cursor.getColumnIndex(COLUMN_ID_CARTAO)) != null){
+                cartao.setIdCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO)));
                 cartao.setCodCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_CARTAO)));
                 cartao.setNomeEmpresa(cursor.getString(cursor.getColumnIndex(COLUMN_NOME_EMPRESA)));
                 cartao.setSaldo(cursor.getString(cursor.getColumnIndex(COLUMN_SALDO)));
@@ -164,7 +168,35 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
         while (!cursor.isAfterLast()){
             Cartao cartao = new Cartao();
-            if (cursor.getString(cursor.getColumnIndex(COLUMN_COD_CARTAO)) != null){
+            if (cursor.getString(cursor.getColumnIndex(COLUMN_ID_CARTAO)) != null){
+                cartao.setIdCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO)));
+                cartao.setCodCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_CARTAO)));
+                cartao.setNomeEmpresa(cursor.getString(cursor.getColumnIndex(COLUMN_NOME_EMPRESA)));
+                cartao.setSaldo(cursor.getString(cursor.getColumnIndex(COLUMN_SALDO)));
+                cartao.setDtUltimoUpdate(cursor.getString(cursor.getColumnIndex(COLUMN_DT_ULTIMO_UPDATE)));
+                cartao.setNome(cursor.getString(cursor.getColumnIndex(COLUMN_NOME)));
+                cartao.setCodEmpresa(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_EMPRESA)));
+            }
+            cartaoList.add(cartao);
+            cursor.moveToNext();
+        }
+        db.close();
+        return cartaoList;
+    }
+
+    public List<Cartao> getUltimasConsultas(){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_CARTAO + " ORDER BY " + COLUMN_ID_CARTAO + " DESC LIMIT 15";
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        List<Cartao> cartaoList = new ArrayList<>();
+
+        while (!cursor.isAfterLast()){
+            Cartao cartao = new Cartao();
+            if (cursor.getString(cursor.getColumnIndex(COLUMN_ID_CARTAO)) != null){
+                cartao.setIdCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO)));
+                cartao.setCodCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_COD_CARTAO)));
                 cartao.setNomeEmpresa(cursor.getString(cursor.getColumnIndex(COLUMN_NOME_EMPRESA)));
                 cartao.setSaldo(cursor.getString(cursor.getColumnIndex(COLUMN_SALDO)));
                 cartao.setDtUltimoUpdate(cursor.getString(cursor.getColumnIndex(COLUMN_DT_ULTIMO_UPDATE)));
@@ -194,6 +226,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
                 movimento.setOperacaoDC(cursor.getString(cursor.getColumnIndex(COLUMN_OPERACAO_DC)));
                 movimento.setDescricao(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRICAO)));
                 movimento.setCancelado(cursor.getString(cursor.getColumnIndex(COLUMN_CANCELADO)));
+                movimento.setFkIdCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_FK_ID_CARTAO)));
             }
             cursor.moveToNext();
         }
@@ -201,9 +234,10 @@ public class MyDbHandler extends SQLiteOpenHelper {
         return movimento;
     }
 
-    public List<Movimento> getAllMovimentos(){
+    public List<Movimento> getAllMovimentos(int idCartao){
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_MOVIMENTO + " WHERE 1 ORDER BY "+ COLUMN_FK_COD_EMPRESA + " COLLATE NOCASE ASC ";
+        String query = "SELECT * FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=" + idCartao +
+                " ORDER BY "+ COLUMN_DT_OCORRENCIA + " COLLATE NOCASE DESC ";
 
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
@@ -211,7 +245,9 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
         while (!cursor.isAfterLast()){
             Movimento movimento = new Movimento();
-            if (cursor.getString(cursor.getColumnIndex(COLUMN_NUM_ID)) != null){
+            if (cursor.getString(cursor.getColumnIndex(COLUMN_ID)) != null){
+                movimento.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                movimento.setNumId(cursor.getString(cursor.getColumnIndex(COLUMN_NUM_ID)));
                 movimento.setCodProduto(cursor.getString(cursor.getColumnIndex(COLUMN_COD_PRODUTO)));
                 movimento.setQuantidade(cursor.getString(cursor.getColumnIndex(COLUMN_QUANTIDADE)));
                 movimento.setVlTotal(cursor.getString(cursor.getColumnIndex(COLUMN_VL_TOTAL)));
@@ -219,6 +255,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
                 movimento.setOperacaoDC(cursor.getString(cursor.getColumnIndex(COLUMN_OPERACAO_DC)));
                 movimento.setDescricao(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRICAO)));
                 movimento.setCancelado(cursor.getString(cursor.getColumnIndex(COLUMN_CANCELADO)));
+                movimento.setFkIdCartao(cursor.getInt(cursor.getColumnIndex(COLUMN_FK_ID_CARTAO)));
             }
             movimentoList.add(movimento);
             cursor.moveToNext();
@@ -237,7 +274,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
     public void deleteCartao(int codCartao){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CARTAO + " WHERE " + COLUMN_COD_CARTAO + " =\"" + codCartao + "\";");
-        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_COD_EMPRESA + "=\"" + codCartao + "\";");
+        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + codCartao + "\";");
         db.close();
     }
 }

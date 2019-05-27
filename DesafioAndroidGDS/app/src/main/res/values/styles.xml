@@ -8,4 +8,31 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Tema TextInputLayout -->
+    <style name="ThemeEditText" parent="AppTheme">
+    <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
+    <!-- Tema customizado -->
+    <style name="CustomActivityTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/colorBlueDark</item>
+        <item name="background">@color/colorBlueDark</item>
+        <item name="android:titleTextStyle">@style/Change.TextAppearance.ActionBar</item>
+        <item name="android:subtitleTextStyle">@style/Change.TextAppearance.ActionBar</item>
+        <item name="titleTextStyle">@style/Change.TextAppearance.ActionBar</item>
+        <item name="subtitleTextStyle">@style/Change.TextAppearance.ActionBar</item>
+    </style>
+
+    <style name="Change.TextAppearance.ActionBar" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorBlueLight</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
