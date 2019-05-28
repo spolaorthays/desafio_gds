@@ -1,5 +1,6 @@
 package com.gds.desafioandroidgds;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -72,6 +73,8 @@ public class DetalhesHistoricoActivity extends AppCompatActivity {
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HistoricoActivity.class);
+                startActivity(intent);
                 finish();
             }
         });

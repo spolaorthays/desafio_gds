@@ -87,8 +87,6 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
     //Métodos de adicionar
     public long adicionarCartao(Cartao cartao){
-        countRows();
-
             ContentValues values = new ContentValues();
             if (cartao.getCodCartao() != -1)
                 values.put(COLUMN_COD_CARTAO, cartao.getCodCartao());
@@ -317,24 +315,38 @@ public class MyDbHandler extends SQLiteOpenHelper {
 
     public void deleteCartao(int idCartao){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + " =\"" + idCartao + "\";");
+        String query = "DELETE FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + " =\"" + idCartao + "\";";
+        db.execSQL(query);
         db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + idCartao + "\";");
         db.close();
     }
 
-    public void deleteCartoesAntigos(int idCartao){
-        SQLiteDatabase db = getWritableDatabase();
+    public void verificacao(){
+        if (countRows()>15){
+            deleteCartoesAntigos();
+        }
+    }
 
-        //Seleciona o id mais antigo
-        String query = "SELECT " +COLUMN_ID_CARTAO+ " FROM " + TABLE_CARTAO + " WHERE " + COLUMN_ID_CARTAO + "=" + idCartao +" ORDER BY DATE" + COLUMN_DT_ULTIMO_UPDATE + " ASC LIMIT 1";
+    //Seleciona o id mais antigo
+    public int idAntigo(){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT " +COLUMN_ID_CARTAO+ " FROM " + TABLE_CARTAO + " WHERE 1 ORDER BY "+ COLUMN_DT_ULTIMO_UPDATE + " ASC LIMIT 1";
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
-        int idSelect=Integer.parseInt(query);
+        int idSelect = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CARTAO));
+        return idSelect;
+    }
+
+    public void deleteCartoesAntigos(){
+        SQLiteDatabase db = getWritableDatabase();
+
+        int idSelect=idAntigo();
 
         //Deleta esse id específico do DB
-        db.execSQL("DELETE FROM " +TABLE_CARTAO+ " WHERE " + idCartao + "= '" + idSelect + "'");
-        db.execSQL("DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + idCartao + "\";");
+        String query = "DELETE FROM " +TABLE_CARTAO+ " WHERE " + COLUMN_ID_CARTAO + "=\"" + idSelect + "\";";
+        db.execSQL(query);
+        query = "DELETE FROM " + TABLE_MOVIMENTO + " WHERE " + COLUMN_FK_ID_CARTAO + "=\"" + idSelect + "\";";
+        db.execSQL(query);
         db.close();
-
     }
 }

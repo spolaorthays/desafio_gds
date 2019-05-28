@@ -88,6 +88,7 @@ public class ConsultaActivity extends AppCompatActivity implements ServiceListen
     }
 
     private long salvarDadosCartao(Cartao cartao){
+        dbHandler.verificacao();
         return dbHandler.adicionarCartao(cartao);
     }
 
